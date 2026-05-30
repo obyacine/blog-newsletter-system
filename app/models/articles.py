@@ -7,7 +7,7 @@ class Article(Base):
     id=Column(Integer,primary_key=True,index=True)
     title=Column(String,nullable=False)
     slug=Column(String,unique=True)
-    author=Column(String,)
+    author=Column(String)
     content=Column(String)
     created_at=Column(DateTime)
     is_published=Column(Boolean,default=False)
