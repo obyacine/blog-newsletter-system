@@ -11,3 +11,6 @@ class Article(Base):
     content=Column(String)
     created_at=Column(DateTime)
     is_published=Column(Boolean,default=False)
+
+
+   

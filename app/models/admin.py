@@ -1,6 +1,7 @@
 from sqlalchemy import  Column,Integer,String,Boolean,DateTime
 from app.database import Base
 
+
 class Admin(Base):
     __tablename__="admin"
 
