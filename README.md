@@ -1,4 +1,4 @@
-# Blog & Newsletter System — MicroClub
+# Blog & Newsletter System —
 
 API FastAPI combinant deux systèmes : gestion de blog et gestion de newsletter, avec authentification admin via JWT.
 
