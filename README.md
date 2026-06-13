@@ -76,6 +76,29 @@ Flux complet :
 4. Admin renvoie ce token dans chaque requête (`Authorization: Bearer ...`)
 5. `get_current_admin` décode le token, retrouve l'admin en base, et protège la route
 
+### La fonction de salage (salt) — 
+
+Le hashage suit le principe `f(x) = y` : une fonction à sens unique, impossible à inverser pour retrouver `x` depuis `y`.
+
+**Problème sans sel**
+Si deux utilisateurs ont le même mot de passe `x`, ils auront le même hash `y`. Un attaquant peut précalculer une table de hashs connus (rainbow table) et retrouver le mot de passe original instantanément.
+
+**La solution : le sel**
+On ajoute un nombre aléatoire unique `z` (le sel) avant de hasher :
+
+f(x + z1) = y1
+f(x + z2) = y2
+
+Même mot de passe `x`, deux sels différents → deux hashs complètement différents. La rainbow table devient inutile.
+
+**Dans ce projet**
+`bcrypt` (via `passlib`) gère tout ça automatiquement :
+- génère un sel aléatoire à chaque `hash_password()`
+- combine mot de passe + sel
+- stocke le sel directement à l'intérieur du hash final
+
+Donc `pwd_context.verify(password, hash)` peut retrouver le sel utilisé et refaire le calcul pour comparer — sans qu'on ait besoin de le stocker séparément.
+
 ### 4. Depends — l'injection de dépendances
 
 `Depends(...)` dit à FastAPI : "avant d'exécuter cette route, exécute cette fonction et donne-moi son résultat".
