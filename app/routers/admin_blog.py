@@ -15,8 +15,8 @@ def create_article(form:ArticleCreate, db:Session=Depends(get_db)):
         author=form.author,
         slug=form.slug,
         content=form.content,
-        is_published=datetime.utcnow
-
+        is_published=form.is_published,
+        created_at=datetime.utcnow()
     )
 
     

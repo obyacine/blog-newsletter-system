@@ -4,9 +4,9 @@ from app.database import get_db
 from app.models.article import Article
 from app.schemas.article import ArticleResponse
 
-routers=APIRouter()
+router=APIRouter()
 
-@routers.get("/articles")
+@router.get("/articles")
 
 def get_articles(db:Session=Depends(get_db)):
     all_articles=db.query(Article).filter(Article.is_published==True).all()
@@ -14,7 +14,7 @@ def get_articles(db:Session=Depends(get_db)):
     return all_articles
         
 
-@routers.get("/articles/{slug}")
+@router.get("/articles/{slug}")
 
 def public_blog(slug:str,db:Session=Depends(get_db)):
 
