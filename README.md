@@ -54,7 +54,6 @@ blog-newsletter-system/
 
 ### 2. Hashage des mots de passe
 
-- On ne stocke **jamais** un mot de passe en clair.
 - `pwd_context.hash(password)` → transforme `"password123"` en quelque chose comme `$2b$12$...`
 - Le **sel** (salt) est un nombre aléatoire ajouté avant le hashage, généré automatiquement par bcrypt. Il garantit que deux mots de passe identiques produisent des hash différents → protège contre les rainbow tables.
 - `pwd_context.verify(password_en_clair, hash_stocké)` → compare et retourne `True`/`False`.
