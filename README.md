@@ -187,8 +187,3 @@ Puis ouvrir : `http://127.0.0.1:8000/docs`
 
 ---
 
-## À faire
-
-- [ ] Protéger les routes `/admin/*` avec `Depends(get_current_admin)`
-- [ ] `services/email_service.py` — envoi réel des newsletters par email
-- [ ] Tests complets sur Swagger UI
