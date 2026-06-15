@@ -170,6 +170,63 @@ Classic SQLAlchemy is **synchronous**. Mixing `async def` with a synchronous ORM
 
 ---
 
+## Docker
+
+The application is containerized with Docker, so it runs identically on any machine without worrying about Python versions, virtual environments, or missing dependencies.
+
+### Key concepts
+
+- **Image** → a frozen, read-only template containing the app + its full environment (lightweight Linux, Python, dependencies, code).
+- **Container** → a running instance of an image.
+- **Why it's useful** → solves the "it works on my machine" problem. The container carries its own environment, so it behaves the same everywhere.
+
+### Dockerfile explained
+
+```dockerfile
+FROM python:3.12-slim        # start from a ready-made lightweight Python image
+WORKDIR /app                 # set the working directory inside the image
+COPY requirements.txt .      # copy dependencies first (layer caching)
+RUN pip install -r requirements.txt   # install dependencies during build
+COPY . .                     # copy the rest of the code (respects .dockerignore)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+Two important details:
+- **Layer caching** → `requirements.txt` is copied before the code because dependencies change rarely. When only the code changes, Docker reuses the cached dependency layer instead of reinstalling everything.
+- **`--host 0.0.0.0`** → required so the server is reachable from outside the container.
+
+**RUN vs CMD**: `RUN` executes during the image build (one-time setup, frozen into the image). `CMD` executes when the container starts (the main action, runs every time).
+
+### .dockerignore
+
+Excludes files that shouldn't be in the image:
+```
+venv/
+__pycache__/
+*.pyc
+.env
+.git/
+.gitignore
+*.db
+```
+
+### Build and run
+
+```bash
+# Build the image
+docker build -t blog-newsletter .
+
+# Run the container
+docker run -p 8000:8000 --env-file .env blog-newsletter
+```
+
+- `-p 8000:8000` → maps the PC's port to the container's port
+- `--env-file .env` → injects secret variables at startup (`.env` is not baked into the image)
+
+Then open: `http://localhost:8000/docs`
+
+---
+
 ## Running the project
 
 ```bash
